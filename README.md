@@ -1,8 +1,8 @@
 # astraeus_galaxy
 
-A lightweight C++ implementation of selected **Astraeus** galaxy evolution routines with merger trees for stellar mass, radiative feedback and metals production exposed through a Python extension module.
+A lightweight implementation of the galaxy evolution algorithm from the **Astraeus** code, that calculate the stellar mass, radiative feedback and metals production from N-body merger trees.
 
-This project is intended as a small, self-contained version of the galaxy-evolution part of Astraeus, with the goal of making the relevant routines callable from Python and eventually integrating them with radiative-transfer calculations.
+This project is intended as a small, self-contained C++ implementation of the galaxy-evolution part of Astraeus, with the goal of making the relevant routines callable from Python and eventually integrating them with radiative-transfer calculations.
 
 ## Features
 
@@ -100,7 +100,7 @@ python3 -c "import numpy; print(numpy.__version__)"
 
 ## Compilation
 
-The extension is built using the supplied `Makefile`.
+The extension is built using the supplied `Makefile` and automatically identify the Python and NumPy C headers. To compile simply run:
 
 ```bash
 make
@@ -168,27 +168,11 @@ will still contain the original Python value unless the C++ wrapper explicitly r
 
 NumPy arrays are different: the wrapper obtains their underlying data through `PyArray_DATA()`, so modifications to those arrays can be reflected directly in Python.
 
+In the future, we will add/remove some of Python variables.
+
 ## C++ / Python linkage
 
-The Python module is named:
-
-```text
-astraeus
-```
-
-The corresponding module definition is:
-
-```cpp
-"astraeus"
-```
-
-and the Python initialization function is:
-
-```cpp
-PyInit_astraeus
-```
-
-These names must remain consistent with the compiled extension:
+The Python module is named `astraeus` and it must remain consistent with the compiled extension:
 
 ```text
 astraeus.<Python-extension-suffix>.so
@@ -202,9 +186,7 @@ astraeus.cpython-312-x86_64-linux-gnu.so
 
 ## Development status
 
-This is currently a **development / experimental implementation** rather than a complete replacement for the original Astraeus galaxy-evolution code.
-
-Some parts of the original Astraeus implementation have been removed or simplified, and several routines still contain `TODO` items concerning the exact physical interpretation and integration with the original Astraeus model.
+This is currently under **development / experimental implementation** rather than a complete replacement for the original Astraeus galaxy-evolution code.
 
 In particular, the current implementation is being adapted for use together with **pyC2Ray**, with radiative feedback evaluated using quantities obtained from the radiative-transfer calculation.
 
@@ -234,19 +216,24 @@ Radiative feedback
 Updated galaxy gas reservoir
 ```
 
-The radiative-feedback calculation determines a maximum allowed gas mass through a feedback factor:
+The radiative-feedback calculation determines a maximum allowed gas mass through a feedback factor, `fg`, calculated by the selected radiative-feedback prescription.
 
-```text
-Mgas,max = fg × (Ωb / Ωm) × Mvir
-```
-
-where `fg` is calculated by the selected radiative-feedback prescription.
-
-## License
-
-Add the appropriate license here according to the licensing terms of the original Astraeus code and the modifications contained in this repository.
 
 ## Acknowledgements
 
-This code is based on galaxy-evolution routines originating from **Astraeus** and has been adapted to provide a lightweight C++/Python interface for use in numerical astrophysics and radiative-transfer workflows.
+This code is based on galaxy-evolution routines originating from **Astraeus** and has been adapted to provide a lightweight C++/Python interface for use in numerical radiative-transfer simulations.
 
+For details on the method and approach see the references below:
+
+* Astraeus I: [Hutter et al. (2021)](https://arxiv.org/abs/2004.08401)
+* Astraeus II: [Ucci et al. (2021)](https://arxiv.org/abs/2004.11096)
+* Astraeus III: [Hutter et al. (2021)](https://arxiv.org/abs/2008.13215)
+* Astraeus IV: [Legrand et al. (2021)](https://arxiv.org/abs/2110.06971)
+* Astraeus V: [Ucci et al. (2022)](https://arxiv.org/abs/2112.02115)
+* Astraeus VI: [Trebitsch, et al. (2022)](https://arxiv.org/abs/2202.02337)
+* Astraeus VII: [Legrand, et al. (2022)](https://arxiv.org/abs/2207.06786)
+* Astraeus VIII: [Hutter, et al. (2023)](https://arxiv.org/abs/2209.14592)
+* Astraeus IX: [Cueto, et al. (2024)](https://arxiv.org/abs/2312.12109)
+* Astraeus X: [Hutter, et al. (2025)](https://arxiv.org/abs/2410.00730)
+
+or see the full code **Astraeus** from its original GitHub page [annehutter/astraeus](https://github.com/annehutter/astraeus).

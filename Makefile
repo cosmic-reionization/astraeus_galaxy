@@ -1,4 +1,4 @@
-PYTHON = python3.11
+PYTHON := $(shell command -v python3)
 CXX = g++
 
 PYTHONINC := $(shell $(PYTHON)-config --includes)
